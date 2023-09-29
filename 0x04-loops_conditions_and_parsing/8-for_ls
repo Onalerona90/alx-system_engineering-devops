@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Iterate through the files in the current directory
+for file in *; do
+    # Check if the file is not hidden (doesn't start with a dot)
+    if [[ ! $file == .* ]]; then
+        # Use parameter expansion to get the part of the name after the first dash
+        name_without_dash="${file#*-}"
+        
+        # Display the modified name
+        echo "$name_without_dash"
+    fi
+done
