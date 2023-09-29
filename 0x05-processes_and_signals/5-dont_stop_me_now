@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Specify the PID of the process you want to stop
+process_pid=$(pgrep -f '4-to_infinity_and_beyond')
+
+# Use the kill command to send a termination signal (SIGTERM) to the process
+kill "$process_pid"

@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Function to handle SIGTERM signal
+terminate() {
+    echo "I am invincible!!!"
+}
+
+# Register the terminate function to handle SIGTERM
+trap 'terminate' SIGTERM
+
+# Infinite loop with sleep
+while true; do
+    echo "To infinity and beyond indefinitely"
+    sleep 2
+done
