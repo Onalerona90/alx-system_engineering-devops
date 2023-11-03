@@ -1,0 +1,62 @@
+Design of Three-Server Web Infrastructure that is secured, serves encrypted traffic, and monitored
+
+1. User Accessing the Website:
+   A user wants to access your website via www.foobar.com securely.
+
+2. Server 1 (Web Server):
+   Hosts the Nginx web server responsible for handling incoming web requests and serving static content.
+
+3. Server 2 (Application Server):
+   Runs your application code (e.g., PHP) to process dynamic web requests and communicate with the database.
+
+4. Server 3 (Database - MySQL):
+   Stores and manages website data, such as user information and content.
+
+5. Firewalls (3):
+   Firewalls are added to enhance security. They control incoming and outgoing network traffic, allowing only authorized communication, and help protect against unauthorized access and potential threats.
+
+6. SSL Certificate:
+   An SSL certificate is used to enable HTTPS, encrypting traffic between the user's browser and the web server. It ensures secure data transmission and builds user trust.
+
+7. Monitoring Clients (3):
+   Monitoring clients, like Sumo Logic or similar services, are used to collect data about the performance and health of the servers and the application. They help in identifying issues and optimizing the infrastructure.
+
+Specifics about this Infrastructure:
+
+1. Firewalls:
+   Firewalls are added for enhanced security. They serve as a barrier against unauthorized access, filter traffic, and provide an additional layer of protection for the servers and the application.
+
+2. Traffic Served Over HTTPS:
+   HTTPS is used to secure data in transit. It encrypts the communication between the user's browser and the web server, protecting sensitive information from eavesdropping and tampering.
+
+3. Monitoring:
+   Monitoring tools collect data about server performance, application behavior, and security. This data helps in identifying and resolving issues proactively.
+
+4. Data Collection for Monitoring:
+   Monitoring clients (Sumo Logic or similar services) collect data by deploying agents on servers. These agents gather and send server and application metrics to a centralized dashboard for analysis.
+
+5. Monitoring Web Server QPS:
+   To monitor web server queries per second (QPS), you can configure the monitoring tool to collect data related to the web server's request rate, response time, and other relevant metrics.
+
+Issues with this Infrastructure:
+
+1. Terminating SSL at the Load Balancer Level:
+   Terminating SSL at the load balancer can be an issue because it doesn't encrypt the traffic between the load balancer and the web server. If an attacker gains access to this internal network, they could intercept unencrypted data. It's more secure to have end-to-end encryption.
+
+2. Single MySQL Server for Writes:
+   Having only one MySQL server capable of accepting writes is a single point of failure. If it goes down, write operations will fail. Implementing replication with a Primary-Replica setup would provide redundancy and fault tolerance.
+
+3. Servers with All the Same Components:
+   Having identical components (database, web server, and application server) can lead to a lack of diversity. If a common vulnerability or issue affects one component, it may impact all servers. Introducing some diversity in components can enhance fault tolerance.
+
+Infrastructure Diagram:
+
+https://github.com/DennisGH22/alx-system_engineering-devops/blob/master/0x09-web_infrastructure_design/Diagram2.png
+
+In the diagram:
+
+1. The user connects to the infrastructure through a firewall.
+2. The infrastructure includes three servers: a web server, an application server, and a database.
+3. Each server is protected by a firewall for enhanced security.
+4. A monitoring client is installed on the application server to collect data.
+5. SSL encryption is implemented between the user and the web server.
