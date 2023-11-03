@@ -3,4 +3,4 @@
 port=98
 
 # Start listening on the specified port
-nc -l -p $port
+nc -l localhost $port
