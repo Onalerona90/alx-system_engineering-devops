@@ -1,0 +1,50 @@
+Design of One-Server Web Infrastructure
+
+1. User Accessing the Website:
+   Imagine a user who wants to access your website by typing "www.foobar.com" into their web browser.
+
+2. Server:
+   You have one server, which is a single physical or virtual machine responsible for hosting your website.
+
+3. Web Server (Nginx):
+   Nginx is the web server software installed on your server. It plays a crucial role in handling incoming web requests, serving static content, and forwarding dynamic requests to the application server.
+
+4. Application Server:
+   The application server is responsible for running your application code (e.g., PHP). It processes dynamic web requests, communicates with the database, and generates dynamic content based on user interactions.
+
+5. Application Files (Your Code Base):
+   Your application files contain the source code that defines the functionality and behavior of your website. This code is executed by the application server in response to user requests.
+
+6. Database (MySQL):
+   MySQL is the database management system installed on the server. It stores and manages data related to your website, such as user information, content, and configurations. The application server communicates with the database to read and write data.
+
+7. Domain Name (foobar.com):
+   The domain name (foobar.com) is a human-readable address used to access the website. The "www" subdomain is commonly used and is represented by a DNS record.
+
+8. DNS Record Type for www.foobar.com:
+   The "www" in www.foobar.com typically corresponds to a "CNAME" (Canonical Name) DNS record. This CNAME record points to the main domain (foobar.com) and ultimately directs to the server's IP address (8.8.8.8).
+
+9. Server Communication with User's Computer:
+   When a user requests your website by typing www.foobar.com into their browser, the server communicates with the user's computer over the internet using the HTTP or HTTPS protocols. The user's browser sends an HTTP request to your server's IP address (8.8.8.8), and the server responds with the necessary content (HTML, CSS, JavaScript) for the user's browser to render.
+
+Issues with this Infrastructure:
+
+1. Single Point of Failure (SPOF):
+   This infrastructure has a single server, which presents a single point of failure. If the server experiences hardware failure or becomes unavailable for any reason, the entire website will go down. To address this, consider adding redundancy by using multiple servers or cloud-based solutions.
+
+2. Downtime During Maintenance:
+   When performing maintenance or deploying new code, the web server typically needs to be restarted. This can result in downtime for users during the maintenance window. To minimize downtime, you can implement rolling updates and hot-swappable servers.
+
+3. Cannot Scale for High Traffic:
+   With only one server, it may not handle significant spikes in incoming traffic efficiently. As traffic grows, you'll need to consider strategies for scaling your infrastructure, such as load balancing and auto-scaling mechanisms.
+
+Infrastructure Diagram:
+
+https://github.com/DennisGH22/alx-system_engineering-devops/blob/master/0x09-web_infrastructure_design/Diagram0.png
+
+In the diagram:
+
+1. The user connects to the server to access the website.
+2. The server hosts both the Nginx web server and the application server.
+3. The application server communicates with the MySQL database.
+4. The website is accessible through the domain name "www.foobar.com," with a DNS record pointing to the server's IP address.

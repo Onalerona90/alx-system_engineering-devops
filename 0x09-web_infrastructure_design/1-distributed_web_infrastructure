@@ -1,0 +1,60 @@
+Design of Three-Server Web Infrastructure
+
+1. User Accessing the Website:
+   A user wants to access your website by typing "www.foobar.com" into their web browser.
+
+2. Server 1 (Web Server):
+   Server 1 hosts the Nginx web server. It is responsible for handling incoming web requests, serving static content, and forwarding dynamic requests to the application server.
+
+3. Server 2 (Application Server):
+   Server 2 is the application server. It runs your application code (e.g., PHP) and processes dynamic web requests. It communicates with the database and generates dynamic content based on user interactions.
+
+4. Server 3 (Load Balancer - HAproxy):
+   Server 3 functions as the load balancer using HAproxy. It distributes incoming traffic across the web and application servers, ensuring even load distribution and high availability.
+
+5. Set of Application Files (Your Code Base):
+   These files contain your website's source code, defining its functionality and behavior. The application server (Server 2) executes this code in response to user requests.
+
+6. Database (MySQL):
+   The database (MySQL) stores and manages data related to your website, such as user information, content, and configurations. The application server (Server 2) communicates with the database to read and write data.
+
+Specifics about this Infrastructure:
+
+1. Why Add Load Balancer:
+   The load balancer is added to distribute traffic evenly and ensure high availability. It also plays a role in improving scalability and fault tolerance.
+
+2. Load Balancer Distribution Algorithm:
+   The load balancer (HAproxy) is configured with a round-robin distribution algorithm. It works by sequentially routing incoming requests to each server in a circular manner, distributing the load evenly.
+
+3. Active-Active Setup:
+   The load balancer enables an Active-Active setup, where both web and application servers actively serve requests. This setup provides load balancing and redundancy.
+
+4. Primary-Replica (Master-Slave) Database Cluster:
+   The MySQL database is set up as a Primary-Replica cluster. In this configuration, the Primary node handles both read and write operations, while the Replica node replicates data from the Primary node and serves as a backup.
+
+5. Difference Between Primary and Replica Node:
+   In terms of the application, the Primary node is responsible for processing write operations, such as creating or updating data. The Replica node primarily handles read operations, providing faster read access to data. This setup improves performance and fault tolerance.
+
+Issues with this Infrastructure:
+
+1. Single Points of Failure (SPOF):
+   - The load balancer (Server 3) itself is a single point of failure. If it fails, traffic distribution will be disrupted.
+   - Lack of redundancy for the database can also be a single point of failure. If the Primary node fails, there might be data loss until the Replica node takes over.
+
+2. Security Issues:
+   - The design doesn't mention the presence of a firewall, which could expose the servers to security vulnerabilities.
+   - There's no mention of HTTPS, which could lead to security risks when transmitting sensitive data.
+
+3. No Monitoring:
+   - The infrastructure lacks monitoring solutions, making it difficult to track server health, traffic patterns, and other performance metrics.
+
+Infrastructure Diagram:
+
+https://github.com/DennisGH22/alx-system_engineering-devops/blob/master/0x09-web_infrastructure_design/Diagram1.png
+
+In the Diagram:
+
+1. The user connects to the server which connects to the load balancer.
+2. The load balancer distributes traffic evenly by directing traffic to either the Nginx web server or the application server.
+3. The application server communicates with the database to process dynamic requests.
+4. The database is set up as a Primary-Replica cluster, enhancing performance and fault tolerance.
