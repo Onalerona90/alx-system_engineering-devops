@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Display information about subdomains.
+
+domain_information () {
+    subdomain=$1
+    domain=$2
+    answer=$(dig "$domain" | awk '/ANSWER SECTION:/ {getline; print $0}')
+    record_type=$(echo "$answer" | awk '{print $4}')
+    destination=$(echo "$answer" | awk '{print $5}')
+
+    echo "The subdomain $subdomain is a $record_type record and points to $destination"
+}
+
+if [[ $# == 1 ]]; then
+    subdomains=('www' 'lb-01' 'web-01' 'web-02')
+    for subdomain in "${subdomains[@]}"; do
+        domain="$subdomain.$1"
+        domain_information "$subdomain" "$domain"
+    done
+else
+    domain="$2.$1"
+    domain_information "$2" "$domain"
+fi
