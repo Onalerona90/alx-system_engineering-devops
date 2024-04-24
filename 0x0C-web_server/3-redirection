@@ -1,12 +1,21 @@
 #!/usr/bin/env bash
-# This script configures the nginx server so that /redirect_me is redirecting to
-# another page.
+# Redirection
 
-sudo apt update
-sudo apt install nginx -y
-sudo ufw allow 22
-sudo ufw allow 80
-sudo ufw enable
-echo 'Holberton School' | sudo tee /var/www/html/index.nginx-debian.html > /dev/null
-sed -i '/listen 80 default_server/a rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;' /etc/nginx/sites-available/default
+# Update package list
+sudo apt-get update
+
+# Install Nginx
+sudo apt-get -y install nginx
+
+# Start Nginx service
+sudo service nginx start
+
+# Create a file with "Hello World!" message
+echo "Hello World!" | sudo tee /var/www/html/index.html > /dev/null
+
+# Configure Nginx with a new string
+redirection_string="server_name _;\n\trewrite ^\/redirect_me https:\/\/onaleronapako.tech permanent;"
+sudo sed -i "s/server_name _;/$redirection_string/" /etc/nginx/sites-enabled/default
+
+# Restart Nginx
 sudo service nginx restart
