@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-# Configure Nginx short and sweet.
-ln -sf "/etc/nginx/sites-available/default" "/etc/nginx/sites-enabled/default"
-sudo service nginx start
-sudo kill "$(pgrep 'nginx' | head -1)"
