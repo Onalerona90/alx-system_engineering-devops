@@ -1,29 +1,20 @@
-# Custom HTTP header in a nginx server
+# Add a custom HTTP header
+exec { '/usr/bin/env apt-get -y update' : }
+-> package { 'nginx':
+   ensure => installed,
+}
 
-# update ubuntu server
-exec { 'update server':
-  command  => 'apt-get update',
-  user     => 'root',
-  provider => 'shell',
+-> file_line { 'add header' :
+   ensure => present,
+   line   => "\tadd_header X-Served-By ${hostname};",
+   path   => '/etc/nginx/sites-enabled/default',
+   after  => 'server_name _;',
 }
-->
-# install nginx web server on server
-package { 'nginx':
-  ensure   => present,
-  provider => 'apt'
+
+-> file { '/var/www/html/index.html' :
+   content => 'School'
 }
-->
-# custom Nginx response header (X-Served-By: hostname)
-file_line { 'add HTTP header':
-  ensure => 'present',
-  path   => '/etc/nginx/sites-available/default',
-  after  => 'listen 80 default_server;',
-  line   => 'add_header X-Served-By $hostname;'
-}
-->
-# start service
-service { 'nginx':
-  ensure  => 'running',
-  enable  => true,
-  require => Package['nginx']
+
+-> service { 'nginx':
+   ensure => running,
 }

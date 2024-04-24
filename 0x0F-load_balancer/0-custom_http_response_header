@@ -1,34 +1,37 @@
 #!/usr/bin/env bash
-# configures a new Ubuntu machine
+# RCustom HTTP response header
 
-# Install nginx on web-01 server
-apt-get -y update
-apt-get -y install nginx
+# Update package list
+sudo apt-get update
 
-# Add custom response header to know the server name for debugging
-HOST_NAME=$(hostname)
-HEADER="\\\n\tadd_header X-Served-By $HOST_NAME;\n"
-FIND=$(grep "X-Server-by" /etc/nginx/sites-available/default)
-if [[ -z $FIND ]]; then
-    sed -i "23i $HEADER" /etc/nginx/sites-available/default
-fi
+# Install Nginx
+sudo apt-get -y install nginx
 
-# Create a firts index.html page
-echo "Hello World!" > /var/www/html/index.html
+# Start Nginx service
+sudo service nginx start
 
-# Add to the nginx configuration file a redirection to another page
-FIND=$(grep "redirect_me" /etc/nginx/sites-available/default)
-STRING="\\\n\tlocation /redirect_me {\n\t\t return 301 https://www.youtube.com/watch?v=3MbaGJN2ioQ;\n\t}\n"
-if [[ -z $FIND ]]; then
-    sed -i "42i $STRING" /etc/nginx/sites-available/default
-fi
+# Create a file with "Hello World!" message
+echo "Hello World!" | sudo tee /var/www/html/index.html > /dev/null
 
-# Add to the nginx configuration file a error page 404
-FIND=$(grep "error_page 404" /etc/nginx/sites-available/default)
-ERROR="\\\n\terror_page 404 /custom_404.html;\n"
-if [[ -z $FIND ]]; then
-    echo "Ceci n'est pas une page" > /var/www/html/custom_404.html
-    sed -i "40i $ERROR" /etc/nginx/sites-available/default
-fi
+# Configure Nginx with a new string
+redirection_string="server_name _;\n\trewrite ^\/redirect_me https:\/\/tebogondaba.tech permanent;"
+sudo sed -i "s/server_name _;/$redirection_string/" /etc/nginx/sites-enabled/default
 
-service nginx restart
+# Create a custom 404 page
+echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html > /dev/null
+
+# Configure Nginx with a new string for custom 404 page
+new_404_string="listen 80 default_server;\n\terror_page 404 \/404.html;\n\tlocation = \/404.html {\n\t\troot \/var\/www\/html;\n\t\tinternal;\n\t}"
+sudo sed -i "s/listen 80 default_server;/$new_404_string/" /etc/nginx/sites-enabled/default
+
+# Get the hostname
+hostname=$(hostname)
+
+# Define the custom header configuration
+custom_header="add_header X-Served-By $hostname;"
+
+# Add the custom header to the Nginx default configuration
+sed -i "/listen \[::\]:80 default_server;/a \ \ $custom_header" /etc/nginx/sites-enabled/default
+
+# Restart Nginx
+sudo service nginx restart
