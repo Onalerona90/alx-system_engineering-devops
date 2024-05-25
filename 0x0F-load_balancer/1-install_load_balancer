@@ -16,8 +16,8 @@ frontend http
 
 backend web-backend
     balance roundrobin
-    server 346505-web-01 54.237.94.18:80 check
-    server 346505-web-02 100.26.154.55:80 check
+    server 346505-web-01 34.204.82.88:80 check
+    server 346505-web-02 34.203.38.99:80 check
 EOF
 )
 
